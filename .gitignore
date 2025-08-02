@@ -1,0 +1,84 @@
+# --------------------
+# Python
+# --------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# --------------------
+# Django
+# --------------------
+*.log
+*.pot
+*.mo
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Static & media files (если не хранятся в Git)
+static/
+media/
+
+# Файлы собранные collectstatic (если используется)
+
+# --------------------
+# Virtualenv
+# --------------------
+venv/
+.venv/
+env/
+.env/
+*/venv/
+*/env/
+
+# --------------------
+# Pytest / Coverage / Mypy / Tox
+# --------------------
+.pytest_cache/
+.coverage
+.coverage.*
+.cache
+.tox/
+.mypy_cache/
+htmlcov/
+
+# --------------------
+# Build / Packaging
+# --------------------
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --------------------
+# IDEs / Editors
+# --------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# --------------------
+# OS-specific
+# --------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+
