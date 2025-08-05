@@ -19,4 +19,8 @@ urlpatterns = [
     path("news/announcement/", views.AnnouncementNewsListAPIView.as_view(), name="announcement-news-list"),
     path("news/interview/", views.InterviewNewsListAPIView.as_view(), name="interview-news-list"),
     path("news/edtors-choice/", views.EditorsChoiceNewsList.as_view(), name="edtors-choice-news-list"),
+    path("contactcreate", views.ContactCreateAPIView.as_view(), name="contactcreate"),
+    path("teams", views.TeamsListAPIView.as_view(), name="teams"),
+    path("search", views.SearchAPIView.as_view(), name="search"),
+    path("stats/", views.SiteStatsAPIView.as_view(), name="site-stats"),
 ]

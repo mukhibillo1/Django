@@ -1,9 +1,16 @@
 from django.shortcuts import render
 from django.views import View
 from rest_framework import generics
-
+from rest_framework.parsers import MultiPartParser
 from helpers import pagination
 from common import models, serializers
+from rest_framework.views import APIView
+from datetime import date, timedelta
+from django.db.models import Sum
+from rest_framework.response import Response
+from django.db.models import Q
+from .models import Visitor, PageCount  # <-- model nomlaringga qarab to'g'rilang
+
 
 
 class BasicNewsListAPIView(generics.ListAPIView):
@@ -119,4 +126,44 @@ class EditorsChoiceNewsList(generics.ListAPIView):
     pagination_class = pagination.ByThree
 
 
+class ContactCreateAPIView(generics.CreateAPIView):
+    queryset = models.ContactCreate.objects.all()
+    serializer_class = serializers.ContacCreateSerializer
+    parser_classes = (MultiPartParser, )
 
+
+
+
+class TeamsListAPIView(generics.ListAPIView):
+    queryset = models.Teams.objects.all()
+    serializer_class = serializers.TeamsSerializer
+    pagination_class = pagination.ByThree
+
+class SearchAPIView(generics.ListAPIView):
+    serializer_class = serializers.NewsListSerializer
+    def get_queryset(self):
+        object_list = models.News.objects.all()
+        search = self.request.GET.get("search", None)
+        if search:
+            object_list = object_list.filter(Q(title__icontains=search) | Q(category__title__icontains=search)| Q(content__icontains=search) | Q(slug__icontains=search) | Q(region__title__icontains=search) | Q(tags__title__icontains=search))
+        return object_list
+
+
+
+class SiteStatsAPIView(APIView):
+    def get(self, request):
+        today = date.today()
+        month_ago = today - timedelta(days=30)
+
+        daily_visitors = Visitor.objects.filter(date=today).count()
+        monthly_visitors = Visitor.objects.filter(date__gte=month_ago).count()
+
+        daily_pageviews = PageCount.objects.filter(date=today).aggregate(total=Sum('count'))['total'] or 0
+        monthly_pageviews = PageCount.objects.filter(date__gte=month_ago).aggregate(total=Sum('count'))['total'] or 0
+
+        return Response({
+            'daily_visitors': daily_visitors,
+            'monthly_visitors': monthly_visitors,
+            'daily_pageviews': daily_pageviews,
+            'monthly_pageviews': monthly_pageviews,
+        })

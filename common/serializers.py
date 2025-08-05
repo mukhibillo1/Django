@@ -44,4 +44,14 @@ class NewsDetailSerializer(serializers.ModelSerializer):
 
 
 
+class ContacCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ContactCreate
+        fields = ["name","phone_number","pochta","thema","message"]
 
+
+
+class TeamsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Teams
+        fields = ["image","name","position"]

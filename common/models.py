@@ -83,7 +83,7 @@ class News(BaseModel):
         related_name="news",
     )
     type = models.CharField(_("type"), choices=TYPE_CHOICES,max_length=256)
-    tags = models.ManyToManyField(NewsTag, verbose_name="tags", related_name="news", null=True, blank=True)
+    tags = models.ManyToManyField(NewsTag, verbose_name="tags", related_name="news", blank=True)
     region = models.ForeignKey(
         Region,
         null=True,
@@ -119,3 +119,51 @@ class News(BaseModel):
 
     def __str__(self):
         return f"{self.title}"
+
+class ContactCreate(BaseModel):
+    name = models.CharField(_("name"),max_length=256)
+    phone_number = models.CharField(_("phone_number"),max_length=256)
+    pochta = models.EmailField(_("pochta"))
+    thema = models.CharField(_("thema"),max_length=256)
+    message = models.FileField(_("message"))
+
+    class Meta:
+        db_table = "contactCreate"
+        verbose_name = _("contactCreate")
+        verbose_name_plural = _("contactCreate")
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Teams(BaseModel):
+    image = models.ImageField(_("image"), upload_to="Teams/%Y/%m")
+    name = models.CharField(_("name"),max_length=256)
+    position = models.CharField(_("position"),max_length=256)
+
+    @property
+    def image_url(self):
+        return f"{settings.HOST}{self.image.url}" if self.image else ""
+
+    class Meta:
+        db_table = "teams"
+        verbose_name = _("teams")
+        verbose_name_plural = _("teams")
+
+    def __str__(self):
+        return f"{self.image}"
+
+
+class Visitor(models.Model):
+    ip_address = models.GenericIPAddressField()
+    date = models.DateField(auto_now_add=True)
+    class Meta:
+        unique_together = ('ip_address', 'date')
+
+
+class PageCount(models.Model):
+    date = models.DateField(auto_now_add=True)
+    count = models.IntegerField(default=0)
+
+    class Meta:
+        db_table = 'pageviews'

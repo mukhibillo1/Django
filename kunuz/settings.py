@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'django.contrib.admin',  # Faqat bir marta
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'ckeditor',
     'common',
+    'modeltranslation',
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -55,6 +55,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'querycount.middleware.QueryCountMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'common.middleware.VisitorCounterMiddleware',
+    'common.middleware.PageViewCounterMiddleware',
 ]
 
 ROOT_URLCONF = 'kunuz.urls'
@@ -83,11 +85,12 @@ INTERNAL_IPS = [
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-try:
-    from .local_settings import *
-except:
-    print("Create local_settings !")
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -105,6 +108,15 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+LANGUAGES = [
+    ('uz', 'Uzbek'),
+    ('ru', 'Russian'),
+    ('en', 'English'),
+]
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'uz'
 
 
 # Internationalization
